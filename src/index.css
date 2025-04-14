@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,10 +14,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 215 50% 23%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 210 60% 57%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -35,19 +36,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -98,4 +92,55 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Prevent horizontal overflow on mobile */
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Custom button styles */
+.btn-primary {
+  @apply bg-avancard-blue hover:bg-avancard-blue/90 text-white font-medium py-4 px-6 rounded-lg transition-all shadow-md hover:shadow-lg text-base sm:text-lg w-full sm:w-auto;
+}
+
+.btn-secondary {
+  @apply bg-avancard-lightBlue hover:bg-avancard-lightBlue/90 text-white font-medium py-4 px-6 rounded-lg transition-all shadow-md hover:shadow-lg text-base sm:text-lg w-full sm:w-auto;
+}
+
+.card-shadow {
+  @apply shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)];
+}
+
+.section-padding {
+  @apply py-12 md:py-20 px-4 md:px-8 lg:px-12;
+}
+
+.section-title {
+  @apply text-2xl md:text-3xl lg:text-4xl font-bold text-avancard-blue mb-4 md:mb-6;
+}
+
+.section-subtitle {
+  @apply text-lg md:text-xl text-avancard-darkGray/80 mb-8;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
 }

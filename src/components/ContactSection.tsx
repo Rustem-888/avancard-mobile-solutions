@@ -1,0 +1,181 @@
+
+import { useState } from 'react';
+import { useToast } from "@/hooks/use-toast";
+import { MapPin, Phone, Mail, Instagram } from 'lucide-react';
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+const ContactSection = () => {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    comment: ""
+  });
+  const [formSubmitting, setFormSubmitting] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.phone) {
+      toast({
+        title: "Пожалуйста, заполните обязательные поля",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setFormSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      toast({
+        title: "Заявка отправлена!",
+        description: "Мы свяжемся с вами в ближайшее время"
+      });
+      setFormData({
+        name: "",
+        phone: "",
+        comment: ""
+      });
+      setFormSubmitting(false);
+    }, 1000);
+  };
+
+  return (
+    <section id="contacts" className="section-padding bg-white">
+      <div className="container mx-auto">
+        <h2 className="section-title text-center">Свяжитесь с нами</h2>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+          <div className="card-shadow rounded-xl p-6 md:p-8 bg-avancard-blue text-white">
+            <h3 className="text-xl md:text-2xl font-bold mb-6">Контактная информация</h3>
+            
+            <div className="space-y-6">
+              <div className="flex items-start">
+                <div className="mr-4 rounded-full bg-white/10 p-2">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium mb-1">Адрес</p>
+                  <p className="text-white/90">г. Астана, пр. Республики, 56/2, офис 24 (Технопарк)</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="mr-4 rounded-full bg-white/10 p-2">
+                  <Phone className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium mb-1">Телефон / WhatsApp</p>
+                  <a href="tel:+77758462682" className="text-white/90 hover:text-white transition-colors">+7 775 846 2682</a>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="mr-4 rounded-full bg-white/10 p-2">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium mb-1">Email</p>
+                  <a href="mailto:avancard.kz@gmail.com" className="text-white/90 hover:text-white transition-colors">avancard.kz@gmail.com</a>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="mr-4 rounded-full bg-white/10 p-2">
+                  <Instagram className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium mb-1">Instagram</p>
+                  <a href="https://instagram.com/avancard_kz" target="_blank" rel="noopener noreferrer" className="text-white/90 hover:text-white transition-colors">
+                    @avancard_kz
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-8 pt-6 border-t border-white/20">
+              <h4 className="font-medium mb-3">Режим работы</h4>
+              <p className="text-white/90">Пн-Пт: 9:00 - 18:00</p>
+              <p className="text-white/90">Сб-Вс: Выходной</p>
+            </div>
+          </div>
+          
+          <div className="card-shadow rounded-xl p-6 md:p-8 bg-white border">
+            <h3 className="text-xl md:text-2xl font-bold text-avancard-blue mb-6">Оставьте заявку</h3>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-avancard-darkGray mb-1">
+                  Имя*
+                </label>
+                <Input
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Введите ваше имя"
+                  required
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-avancard-darkGray mb-1">
+                  Телефон*
+                </label>
+                <Input
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="+7 (___) ___ __ __"
+                  required
+                  type="tel"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="comment" className="block text-sm font-medium text-avancard-darkGray mb-1">
+                  Комментарий
+                </label>
+                <Textarea
+                  id="comment"
+                  name="comment"
+                  value={formData.comment}
+                  onChange={handleChange}
+                  placeholder="Опишите ваш запрос или задайте вопрос"
+                  className="w-full min-h-[120px]"
+                />
+              </div>
+              
+              <button
+                type="submit"
+                disabled={formSubmitting}
+                className="w-full btn-primary mt-2 flex justify-center items-center"
+              >
+                {formSubmitting ? 'Отправка...' : 'Отправить заявку'}
+              </button>
+              
+              <p className="text-xs text-avancard-darkGray/70 text-center mt-2">
+                Нажимая "Отправить заявку", вы соглашаетесь с политикой конфиденциальности
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ContactSection;
