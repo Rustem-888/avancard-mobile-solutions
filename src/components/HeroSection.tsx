@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
@@ -58,15 +57,15 @@ const HeroSection = () => {
   return (
     <section className="pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-b from-white to-avancard-gray/30">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="w-full md:w-1/2 space-y-6">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-avancard-blue">
+        <div className="flex flex-col items-center justify-center">
+          <div className="w-full text-center space-y-6">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-avancard-blue text-center">
               Пластиковые карты для вашего бизнеса с доставкой по всему Казахстану
             </h1>
-            <p className="text-lg md:text-xl text-avancard-darkGray">
+            <p className="text-lg md:text-xl text-avancard-darkGray text-center max-w-2xl mx-auto">
               Производим карты под любые задачи — чётко, в срок, с учетом особенностей вашего бизнеса. 
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
               <button 
                 onClick={() => setRequestDialogOpen(true)} 
                 className="btn-primary flex items-center justify-center gap-2"
@@ -81,17 +80,6 @@ const HeroSection = () => {
                 <Phone size={20} />
                 Заказать звонок
               </button>
-            </div>
-          </div>
-          <div className="w-full md:w-1/2 flex justify-center">
-            <div className="relative">
-              <div className="w-64 h-64 md:w-80 md:h-80 bg-avancard-blue/10 rounded-full absolute -top-6 -right-6"></div>
-              <img 
-                src="/lovable-uploads/c4995d95-8e7e-4c4b-88e9-9fb2e60bc6e5.png" 
-                alt="Пластиковые карты AvanCard" 
-                className="relative z-10 rounded-xl shadow-xl w-full max-w-md aspect-square object-contain"
-              />
-              <div className="w-32 h-32 md:w-48 md:h-48 bg-avancard-lightBlue/20 rounded-full absolute -bottom-4 -left-4"></div>
             </div>
           </div>
         </div>
