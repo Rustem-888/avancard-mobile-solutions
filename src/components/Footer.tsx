@@ -1,6 +1,5 @@
 
 import { MapPin, Phone, Mail, Instagram } from 'lucide-react';
-import LogoImage from '/public/lovable-uploads/e80e0464-c8df-412e-8673-70e0d111cb68.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,11 +10,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="mb-4 flex items-center gap-2">
-              <img 
-                src={LogoImage} 
-                alt="AvanCard Logo" 
-                className="h-10 object-contain"
-              />
+              {/* Replace image with text logo */}
+              <span className="bg-white text-avancard-blue px-2 py-1 rounded font-bold">AvanCard</span>
             </div>
             <p className="mb-4 text-white/80">
               Производство пластиковых карт для бизнеса в Казахстане. Качество, надежность и индивидуальный подход.
