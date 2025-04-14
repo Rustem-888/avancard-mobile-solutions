@@ -12,7 +12,7 @@ const ContactSection = () => {
     if (window.amo_forms_loaded) {
       try {
         // @ts-ignore
-        window.amo_forms_loaded(1523890, 'show');
+        window.amo_forms_loaded(1724615, 'show');
       } catch (error) {
         console.error("Error opening AmoCRM form:", error);
         toast({

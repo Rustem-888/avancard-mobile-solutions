@@ -17,24 +17,26 @@ const HeroSection = () => {
       // @ts-ignore
       window.amo_forms_load = window.amo_forms_load || function(f) {window.amo_forms_load.f = (window.amo_forms_load.f || []).concat([f])};
       // @ts-ignore
-      window.amo_forms_load({id: "1523890", hash: "299c6067690a7b5f6005808bdb2b62e9", locale: "ru"});
+      window.amo_forms_load({id: "1724615", hash: "6e46170722565c30ebd078fe56a59775", locale: "ru"});
       // @ts-ignore
       window.amo_forms_loaded = window.amo_forms_loaded || function(f, k) {window.amo_forms_loaded.f = (window.amo_forms_loaded.f || []).concat([[f, k]])};
       
-      // Create and append the script element
-      const script = document.createElement('script');
-      script.id = "amoforms_script_1523890";
-      script.async = true;
-      script.charset = "utf-8";
-      script.src = "https://forms.amocrm.ru/forms/assets/js/amoforms.js?1744628079";
-      document.body.appendChild(script);
+      // Create and append the script element if it doesn't exist
+      if (!document.getElementById("amoforms_script_1724615")) {
+        const script = document.createElement('script');
+        script.id = "amoforms_script_1724615";
+        script.async = true;
+        script.charset = "utf-8";
+        script.src = "https://forms.amocrm.ru/forms/assets/js/amoforms.js";
+        document.body.appendChild(script);
+      }
     };
     
     initAmoCRM();
     
     // Cleanup function to remove the script when component unmounts
     return () => {
-      const script = document.getElementById("amoforms_script_1523890");
+      const script = document.getElementById("amoforms_script_1724615");
       if (script) {
         script.remove();
       }
@@ -47,7 +49,7 @@ const HeroSection = () => {
     if (window.amo_forms_loaded) {
       try {
         // @ts-ignore
-        window.amo_forms_loaded(1523890, 'show');
+        window.amo_forms_loaded(1724615, 'show');
       } catch (error) {
         console.error("Error opening AmoCRM form:", error);
         toast({
