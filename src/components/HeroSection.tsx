@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
@@ -60,11 +61,10 @@ const HeroSection = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="w-full md:w-1/2 space-y-6">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-avancard-blue">
-              Пластиковые карты для вашего бизнеса
+              Пластиковые карты для вашего бизнеса с доставкой по всему Казахстану
             </h1>
             <p className="text-lg md:text-xl text-avancard-darkGray">
-              Производим карты под любые задачи — чётко, в срок, с учётом особенностей вашего бизнеса. 
-              Каждый заказ рассчитывается индивидуально.
+              Производим карты под любые задачи — чётко, в срок, с учетом особенностей вашего бизнеса. 
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button 
