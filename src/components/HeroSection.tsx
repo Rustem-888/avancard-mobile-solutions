@@ -1,68 +1,57 @@
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
   const { toast } = useToast();
-  
-  // Initialize AmoCRM form
-  useEffect(() => {
-    // Define AmoCRM initialization function
-    const initAmoCRM = () => {
-      if (window.amo_forms_params && window.amo_forms_load && window.amo_forms_loaded) return;
-      
-      // @ts-ignore
-      window.amo_forms_params = window.amo_forms_params || {setMeta: function(p) {this.params = (this.params || []).concat([p])}};
-      // @ts-ignore
-      window.amo_forms_load = window.amo_forms_load || function(f) {window.amo_forms_load.f = (window.amo_forms_load.f || []).concat([f])};
-      // @ts-ignore
-      window.amo_forms_load({id: "1724615", hash: "6e46170722565c30ebd078fe56a59775", locale: "ru"});
-      // @ts-ignore
-      window.amo_forms_loaded = window.amo_forms_loaded || function(f, k) {window.amo_forms_loaded.f = (window.amo_forms_loaded.f || []).concat([[f, k]])};
-      
-      // Create and append the script element if it doesn't exist
-      if (!document.getElementById("amoforms_script_1724615")) {
-        const script = document.createElement('script');
-        script.id = "amoforms_script_1724615";
-        script.async = true;
-        script.charset = "utf-8";
-        script.src = "https://forms.amocrm.ru/forms/assets/js/amoforms.js";
-        document.body.appendChild(script);
-      }
-    };
-    
-    initAmoCRM();
-    
-    // Cleanup function to remove the script when component unmounts
-    return () => {
-      const script = document.getElementById("amoforms_script_1724615");
-      if (script) {
-        script.remove();
-      }
-    };
-  }, []);
+  const [requestDialogOpen, setRequestDialogOpen] = useState(false);
+  const [callDialogOpen, setCallDialogOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [comment, setComment] = useState("");
 
-  // Function to open AmoCRM form modal using their API
-  const openAmoForm = () => {
-    // @ts-ignore
-    if (window.amo_forms_loaded) {
-      try {
-        // @ts-ignore
-        window.amo_forms_loaded(1724615, 'show');
-      } catch (error) {
-        console.error("Error opening AmoCRM form:", error);
-        toast({
-          title: "Ошибка при открытии формы",
-          variant: "destructive"
-        });
-      }
-    } else {
+  const handleRequestSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !phone) {
       toast({
-        title: "Форма загружается, пожалуйста, подождите",
-        variant: "default"
+        title: "Пожалуйста, заполните обязательные поля",
+        variant: "destructive"
       });
+      return;
     }
+    
+    toast({
+      title: "Заявка отправлена!",
+      description: "Мы свяжемся с вами в ближайшее время",
+    });
+    
+    setRequestDialogOpen(false);
+    setName("");
+    setPhone("");
+    setComment("");
+  };
+
+  const handleCallSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !phone) {
+      toast({
+        title: "Пожалуйста, заполните обязательные поля",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    toast({
+      title: "Запрос на звонок отправлен!",
+      description: "Мы перезвоним вам в ближайшее время",
+    });
+    
+    setCallDialogOpen(false);
+    setName("");
+    setPhone("");
   };
 
   return (
@@ -78,14 +67,14 @@ const HeroSection = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
               <button 
-                onClick={openAmoForm} 
+                onClick={() => setRequestDialogOpen(true)} 
                 className="btn-primary flex items-center justify-center gap-2"
               >
                 <CreditCard size={20} />
                 Оставить заявку
               </button>
               <button 
-                onClick={openAmoForm}
+                onClick={() => setCallDialogOpen(true)}
                 className="btn-secondary flex items-center justify-center gap-2"
               >
                 <Phone size={20} />
@@ -95,9 +84,95 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      
-      {/* Hidden div for AmoCRM form initialization */}
-      <div id="amoform-container" style={{ display: 'none' }}></div>
+
+      <Dialog open={requestDialogOpen} onOpenChange={setRequestDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Оставить заявку</DialogTitle>
+            <DialogDescription>
+              Заполните форму, и мы свяжемся с вами для обсуждения деталей заказа
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleRequestSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="name" className="text-sm font-medium">
+                Имя*
+              </label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Введите имя"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="phone" className="text-sm font-medium">
+                Телефон*
+              </label>
+              <Input
+                id="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+7 (___) ___ __ __"
+                required
+                type="tel"
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="comment" className="text-sm font-medium">
+                Комментарий
+              </label>
+              <Input
+                id="comment"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Опишите ваш запрос"
+              />
+            </div>
+            <Button type="submit" className="w-full">Отправить заявку</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={callDialogOpen} onOpenChange={setCallDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Заказать звонок</DialogTitle>
+            <DialogDescription>
+              Оставьте ваш номер, и мы перезвоним вам в ближайшее время
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleCallSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="callName" className="text-sm font-medium">
+                Имя*
+              </label>
+              <Input
+                id="callName"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Введите имя"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="callPhone" className="text-sm font-medium">
+                Телефон*
+              </label>
+              <Input
+                id="callPhone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+7 (___) ___ __ __"
+                required
+                type="tel"
+              />
+            </div>
+            <Button type="submit" className="w-full">Заказать звонок</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
