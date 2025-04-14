@@ -9,30 +9,30 @@ const GallerySection = () => {
 
   const projects = [
     {
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80",
+      image: "/lovable-uploads/f20732fa-ee8e-409b-8444-d2c4ca8708a9.png",
       title: "Дисконтные карты для сети магазинов",
-      description: "Карты с магнитной полосой и индивидуальной нумерацией"
+      description: "Карты с напечатанной порядковой нумерацией"
     },
     {
-      image: "https://images.unsplash.com/photo-1556745753-b2904692b3cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80",
-      title: "Подарочные карты для ресторана",
-      description: "Карты с эмбоссированием и золотым тиснением"
+      image: "/lovable-uploads/d4d0be92-3161-4d3a-b481-803e9bd5aa99.png",
+      title: "Дисконтная карта для ресторана",
+      description: "Карта с эмбоссированием, магнитной полосой"
     },
     {
-      image: "https://images.unsplash.com/photo-1613243555988-441166d4d6fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80",
+      image: "/lovable-uploads/e3ada075-b680-4730-9f3f-63a6c756d9b7.png",
       title: "Клубные карты фитнес-центра",
-      description: "Карты с RFID-чипом и QR-кодом для быстрой идентификации"
+      description: "Карты с RFID чипом для быстрой идентификации"
     },
     {
-      image: "https://images.unsplash.com/photo-1571867424488-4565932edb41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80",
-      title: "Топливные карты для АЗС",
-      description: "Карты с высоким уровнем защиты и чипом"
+      image: "/lovable-uploads/e786e0e6-6eba-41e2-87ec-17355efd72c0.png",
+      title: "Подарочная карта",
+      description: "Карта на серебристом пластике с эмбоссированием"
     },
     {
-      image: "https://images.unsplash.com/photo-1601597111158-2fceff292cdc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80",
-      title: "ID-карты для офисного центра",
-      description: "Карты сотрудников с фото и бесконтактным чипом"
-    },
+      image: "/lovable-uploads/c4995d95-8e7e-4c4b-88e9-9fb2e60bc6e5.png",
+      title: "Карта для паркинга ТРЦ",
+      description: "Карта с RFID чипом для быстрой идентификации"
+    }
   ];
 
   const nextSlide = () => {
@@ -96,7 +96,7 @@ const GallerySection = () => {
                     <img 
                       src={project.image} 
                       alt={project.title} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain" // Changed from object-cover to object-contain
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent py-4 md:py-8 px-4 md:px-8">
                       <h3 className="text-white text-lg md:text-2xl font-bold mb-2">{project.title}</h3>
@@ -155,3 +155,4 @@ const GallerySection = () => {
 };
 
 export default GallerySection;
+
