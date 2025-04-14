@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
@@ -61,7 +60,7 @@ const HeroSection = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="w-full md:w-1/2 space-y-6">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-avancard-blue">
-              Ваш партнёр в пластиковых решениях
+              Пластиковые карты для вашего бизнеса
             </h1>
             <p className="text-lg md:text-xl text-avancard-darkGray">
               Производим карты под любые задачи — чётко, в срок, с учётом особенностей вашего бизнеса. 
@@ -88,9 +87,9 @@ const HeroSection = () => {
             <div className="relative">
               <div className="w-64 h-64 md:w-80 md:h-80 bg-avancard-blue/10 rounded-full absolute -top-6 -right-6"></div>
               <img 
-                src="https://images.unsplash.com/photo-1566125882500-87e10f726cdc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600&q=80" 
+                src="/lovable-uploads/c4995d95-8e7e-4c4b-88e9-9fb2e60bc6e5.png" 
                 alt="Пластиковые карты AvanCard" 
-                className="relative z-10 rounded-xl shadow-xl w-full max-w-md aspect-square object-cover"
+                className="relative z-10 rounded-xl shadow-xl w-full max-w-md aspect-square object-contain"
               />
               <div className="w-32 h-32 md:w-48 md:h-48 bg-avancard-lightBlue/20 rounded-full absolute -bottom-4 -left-4"></div>
             </div>
@@ -98,7 +97,6 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Request Dialog */}
       <Dialog open={requestDialogOpen} onOpenChange={setRequestDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -149,7 +147,6 @@ const HeroSection = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Call Dialog */}
       <Dialog open={callDialogOpen} onOpenChange={setCallDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
