@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import LogoImage from '/public/lovable-uploads/e80e0464-c8df-412e-8673-70e0d111cb68.png';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,8 +13,12 @@ const Header = () => {
   return (
     <header className="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <a href="#" className="text-xl font-bold text-avancard-blue flex items-center gap-2">
-          <span className="bg-avancard-blue text-white px-2 py-1 rounded">AvanCard</span>
+        <a href="#" className="flex items-center gap-2">
+          <img 
+            src={LogoImage} 
+            alt="AvanCard Logo" 
+            className="h-10 object-contain"
+          />
         </a>
         
         {/* Mobile menu button */}
