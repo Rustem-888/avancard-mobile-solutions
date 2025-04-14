@@ -1,9 +1,5 @@
-
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-
-// Fix the logo import - use a relative path instead of absolute path
-import LogoImage from '../assets/logo.png';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,10 +12,11 @@ const Header = () => {
     <header className="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <a href="#" className="flex items-center gap-2">
-          {/* Use text as a fallback if image doesn't load */}
-          <div className="flex items-center">
-            <span className="bg-avancard-blue text-white px-2 py-1 rounded text-xl font-bold">AvanCard</span>
-          </div>
+          <img 
+            src="/lovable-uploads/a9f3100e-ecb9-4c74-9bc4-59285540b0a0.png" 
+            alt="AvanCard Logo" 
+            className="h-10 object-contain"
+          />
         </a>
         
         {/* Mobile menu button */}

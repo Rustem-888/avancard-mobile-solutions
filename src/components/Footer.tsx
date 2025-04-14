@@ -10,8 +10,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="mb-4 flex items-center gap-2">
-              {/* Replace image with text logo */}
-              <span className="bg-white text-avancard-blue px-2 py-1 rounded font-bold">AvanCard</span>
+              <img 
+                src="/lovable-uploads/a9f3100e-ecb9-4c74-9bc4-59285540b0a0.png" 
+                alt="AvanCard Logo" 
+                className="h-12 object-contain bg-white p-1 rounded"
+              />
             </div>
             <p className="mb-4 text-white/80">
               Производство пластиковых карт для бизнеса в Казахстане. Качество, надежность и индивидуальный подход.
