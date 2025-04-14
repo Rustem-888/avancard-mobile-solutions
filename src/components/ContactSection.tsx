@@ -1,53 +1,31 @@
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { MapPin, Phone, Mail, Instagram } from 'lucide-react';
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 
 const ContactSection = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    comment: ""
-  });
-  const [formSubmitting, setFormSubmitting] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!formData.name || !formData.phone) {
+  
+  // Function to open AmoCRM form modal using their API
+  const openAmoForm = () => {
+    // @ts-ignore
+    if (window.amo_forms_loaded) {
+      try {
+        // @ts-ignore
+        window.amo_forms_loaded(1523890, 'show');
+      } catch (error) {
+        console.error("Error opening AmoCRM form:", error);
+        toast({
+          title: "Ошибка при открытии формы",
+          variant: "destructive"
+        });
+      }
+    } else {
       toast({
-        title: "Пожалуйста, заполните обязательные поля",
-        variant: "destructive"
+        title: "Форма загружается, пожалуйста, подождите",
+        variant: "default"
       });
-      return;
     }
-    
-    setFormSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      toast({
-        title: "Заявка отправлена!",
-        description: "Мы свяжемся с вами в ближайшее время"
-      });
-      setFormData({
-        name: "",
-        phone: "",
-        comment: ""
-      });
-      setFormSubmitting(false);
-    }, 1000);
   };
 
   return (
@@ -112,65 +90,20 @@ const ContactSection = () => {
           
           <div className="card-shadow rounded-xl p-6 md:p-8 bg-white border">
             <h3 className="text-xl md:text-2xl font-bold text-avancard-blue mb-6">Оставьте заявку</h3>
+            <p className="text-avancard-darkGray mb-6">
+              Заполните форму ниже, и мы свяжемся с вами в ближайшее время для обсуждения вашего проекта
+            </p>
             
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-avancard-darkGray mb-1">
-                  Имя*
-                </label>
-                <Input
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Введите ваше имя"
-                  required
-                  className="w-full"
-                />
-              </div>
+            <button
+              onClick={openAmoForm}
+              className="w-full btn-primary mt-2 flex justify-center items-center"
+            >
+              Открыть форму заявки
+            </button>
               
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-avancard-darkGray mb-1">
-                  Телефон*
-                </label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="+7 (___) ___ __ __"
-                  required
-                  type="tel"
-                  className="w-full"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="comment" className="block text-sm font-medium text-avancard-darkGray mb-1">
-                  Комментарий
-                </label>
-                <Textarea
-                  id="comment"
-                  name="comment"
-                  value={formData.comment}
-                  onChange={handleChange}
-                  placeholder="Опишите ваш запрос или задайте вопрос"
-                  className="w-full min-h-[120px]"
-                />
-              </div>
-              
-              <button
-                type="submit"
-                disabled={formSubmitting}
-                className="w-full btn-primary mt-2 flex justify-center items-center"
-              >
-                {formSubmitting ? 'Отправка...' : 'Отправить заявку'}
-              </button>
-              
-              <p className="text-xs text-avancard-darkGray/70 text-center mt-2">
-                Нажимая "Отправить заявку", вы соглашаетесь с политикой конфиденциальности
-              </p>
-            </form>
+            <p className="text-xs text-avancard-darkGray/70 text-center mt-4">
+              Нажимая "Открыть форму заявки", вы соглашаетесь с политикой конфиденциальности
+            </p>
           </div>
         </div>
       </div>
