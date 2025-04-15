@@ -16,7 +16,7 @@ const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    comment: ""
+    message: "" // Changed from 'comment' to 'message'
   });
   const [formSubmitting, setFormSubmitting] = useState(false);
 
@@ -47,7 +47,7 @@ const ContactSection = () => {
         subject: "Заявка с сайта №1 avancard.kz",
         from_name: formData.name,
         phone: formData.phone,
-        message: formData.comment || "Без комментария",
+        message: formData.message || "Без комментария", // Changed from formData.comment to formData.message
       };
       
       // Make sure to initialize EmailJS before sending the email
@@ -71,7 +71,7 @@ const ContactSection = () => {
       setFormData({
         name: "",
         phone: "",
-        comment: ""
+        message: "" // Changed from 'comment' to 'message'
       });
     } catch (error) {
       console.error("Ошибка отправки:", error);
@@ -183,13 +183,13 @@ const ContactSection = () => {
               </div>
               
               <div>
-                <label htmlFor="comment" className="block text-sm font-medium text-avancard-darkGray mb-1">
+                <label htmlFor="message" className="block text-sm font-medium text-avancard-darkGray mb-1">
                   Комментарий
                 </label>
                 <Textarea
-                  id="comment"
-                  name="comment"
-                  value={formData.comment}
+                  id="message"
+                  name="message"
+                  value={formData.message}
                   onChange={handleChange}
                   placeholder="Опишите ваш запрос или задайте вопрос"
                   className="w-full min-h-[120px]"
@@ -217,3 +217,4 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
+
