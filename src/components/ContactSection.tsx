@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { MapPin, Phone, Mail, Instagram } from 'lucide-react';
@@ -7,9 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import emailjs from 'emailjs-com';
 
 // EmailJS конфигурация
-const EMAILJS_SERVICE_ID = "service_emailjs"; // Необходимо заменить на ваш Service ID
-const EMAILJS_TEMPLATE_ID = "template_emailjs"; // Необходимо заменить на ваш Template ID
-const EMAILJS_PUBLIC_KEY = "your_public_key"; // Необходимо заменить на ваш Public Key
+const EMAILJS_SERVICE_ID = "service_91fucbj"; // Обновленный Service ID
+const EMAILJS_TEMPLATE_ID = "template_emailjs"; // Потребуется обновить, когда у вас будет реальный Template ID
+const EMAILJS_PUBLIC_KEY = "your_public_key"; // Потребуется обновить, когда у вас будет реальный Public Key
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -50,17 +49,15 @@ const ContactSection = () => {
         message: formData.comment || "Без комментария",
       };
       
-      // Раскомментировать после получения реальных ключей EmailJS
-      // await emailjs.send(
-      //   EMAILJS_SERVICE_ID,
-      //   EMAILJS_TEMPLATE_ID,
-      //   templateParams,
-      //   EMAILJS_PUBLIC_KEY
-      // );
+      // Раскомментировать и использовать реальные ключи EmailJS
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY
+      );
       
-      // Симуляция отправки для демонстрации
-      console.log("Отправка данных:", templateParams);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log("Сообщение отправлено:", templateParams);
       
       toast({
         title: "Заявка отправлена!",

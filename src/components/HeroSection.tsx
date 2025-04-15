@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
@@ -8,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import emailjs from 'emailjs-com';
 
 // EmailJS конфигурация
-const EMAILJS_SERVICE_ID = "service_emailjs"; // Необходимо заменить на ваш Service ID
-const EMAILJS_TEMPLATE_ID = "template_emailjs"; // Необходимо заменить на ваш Template ID
-const EMAILJS_PUBLIC_KEY = "your_public_key"; // Необходимо заменить на ваш Public Key
+const EMAILJS_SERVICE_ID = "service_91fucbj"; // Обновленный Service ID
+const EMAILJS_TEMPLATE_ID = "template_emailjs"; // Потребуется обновить, когда у вас будет реальный Template ID
+const EMAILJS_PUBLIC_KEY = "your_public_key"; // Потребуется обновить, когда у вас будет реальный Public Key
 
 const HeroSection = () => {
   const { toast } = useToast();
@@ -25,17 +24,15 @@ const HeroSection = () => {
     setIsSubmitting(true);
     
     try {
-      // Раскомментировать после получения реальных ключей EmailJS
-      // await emailjs.send(
-      //   EMAILJS_SERVICE_ID,
-      //   EMAILJS_TEMPLATE_ID,
-      //   templateParams,
-      //   EMAILJS_PUBLIC_KEY
-      // );
+      // Используем реальный Service ID
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY
+      );
       
-      // Симуляция отправки для демонстрации
       console.log("Отправка данных:", templateParams);
-      await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
         title: "Заявка отправлена!",
