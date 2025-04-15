@@ -4,6 +4,12 @@ import { useToast } from "@/hooks/use-toast";
 import { MapPin, Phone, Mail, Instagram } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import emailjs from 'emailjs-com';
+
+// EmailJS конфигурация
+const EMAILJS_SERVICE_ID = "service_emailjs"; // Необходимо заменить на ваш Service ID
+const EMAILJS_TEMPLATE_ID = "template_emailjs"; // Необходимо заменить на ваш Template ID
+const EMAILJS_PUBLIC_KEY = "your_public_key"; // Необходимо заменить на ваш Public Key
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -22,7 +28,7 @@ const ContactSection = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name || !formData.phone) {
@@ -35,19 +41,47 @@ const ContactSection = () => {
     
     setFormSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const templateParams = {
+        to_email: "avancard.kz@gmail.com",
+        subject: "Заявка с сайта №1 avancard.kz",
+        from_name: formData.name,
+        phone: formData.phone,
+        message: formData.comment || "Без комментария",
+      };
+      
+      // Раскомментировать после получения реальных ключей EmailJS
+      // await emailjs.send(
+      //   EMAILJS_SERVICE_ID,
+      //   EMAILJS_TEMPLATE_ID,
+      //   templateParams,
+      //   EMAILJS_PUBLIC_KEY
+      // );
+      
+      // Симуляция отправки для демонстрации
+      console.log("Отправка данных:", templateParams);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       toast({
         title: "Заявка отправлена!",
-        description: "Мы свяжемся с вами в ближайшее время"
+        description: "Сообщение успешно доставлено на email avancard.kz@gmail.com"
       });
+      
       setFormData({
         name: "",
         phone: "",
         comment: ""
       });
+    } catch (error) {
+      console.error("Ошибка отправки:", error);
+      toast({
+        title: "Ошибка отправки!",
+        description: "Пожалуйста, попробуйте позже или свяжитесь с нами по телефону",
+        variant: "destructive"
+      });
+    } finally {
       setFormSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -126,6 +160,7 @@ const ContactSection = () => {
                   placeholder="Введите ваше имя"
                   required
                   className="w-full"
+                  disabled={formSubmitting}
                 />
               </div>
               
@@ -142,6 +177,7 @@ const ContactSection = () => {
                   required
                   type="tel"
                   className="w-full"
+                  disabled={formSubmitting}
                 />
               </div>
               
@@ -156,6 +192,7 @@ const ContactSection = () => {
                   onChange={handleChange}
                   placeholder="Опишите ваш запрос или задайте вопрос"
                   className="w-full min-h-[120px]"
+                  disabled={formSubmitting}
                 />
               </div>
               

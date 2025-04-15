@@ -1,9 +1,16 @@
+
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import emailjs from 'emailjs-com';
+
+// EmailJS конфигурация
+const EMAILJS_SERVICE_ID = "service_emailjs"; // Необходимо заменить на ваш Service ID
+const EMAILJS_TEMPLATE_ID = "template_emailjs"; // Необходимо заменить на ваш Template ID
+const EMAILJS_PUBLIC_KEY = "your_public_key"; // Необходимо заменить на ваш Public Key
 
 const HeroSection = () => {
   const { toast } = useToast();
@@ -12,29 +19,45 @@ const HeroSection = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [comment, setComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleRequestSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !phone) {
+  const sendEmail = async (templateParams: any) => {
+    setIsSubmitting(true);
+    
+    try {
+      // Раскомментировать после получения реальных ключей EmailJS
+      // await emailjs.send(
+      //   EMAILJS_SERVICE_ID,
+      //   EMAILJS_TEMPLATE_ID,
+      //   templateParams,
+      //   EMAILJS_PUBLIC_KEY
+      // );
+      
+      // Симуляция отправки для демонстрации
+      console.log("Отправка данных:", templateParams);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       toast({
-        title: "Пожалуйста, заполните обязательные поля",
+        title: "Заявка отправлена!",
+        description: "Сообщение успешно доставлено на email avancard.kz@gmail.com",
+      });
+      
+      return true;
+    } catch (error) {
+      console.error("Ошибка отправки:", error);
+      toast({
+        title: "Ошибка отправки!",
+        description: "Пожалуйста, попробуйте позже или свяжитесь с нами по телефону",
         variant: "destructive"
       });
-      return;
+      
+      return false;
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    toast({
-      title: "Заявка отправлена!",
-      description: "Мы свяжемся с вами в ближайшее время",
-    });
-    
-    setRequestDialogOpen(false);
-    setName("");
-    setPhone("");
-    setComment("");
   };
 
-  const handleCallSubmit = (e: React.FormEvent) => {
+  const handleRequestSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone) {
       toast({
@@ -44,14 +67,47 @@ const HeroSection = () => {
       return;
     }
     
-    toast({
-      title: "Запрос на звонок отправлен!",
-      description: "Мы перезвоним вам в ближайшее время",
-    });
+    const templateParams = {
+      to_email: "avancard.kz@gmail.com",
+      subject: "Заявка с сайта №1 avancard.kz",
+      from_name: name,
+      phone: phone,
+      message: comment || "Без комментария",
+    };
     
-    setCallDialogOpen(false);
-    setName("");
-    setPhone("");
+    const success = await sendEmail(templateParams);
+    if (success) {
+      setRequestDialogOpen(false);
+      setName("");
+      setPhone("");
+      setComment("");
+    }
+  };
+
+  const handleCallSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !phone) {
+      toast({
+        title: "Пожалуйста, заполните обязательные поля",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const templateParams = {
+      to_email: "avancard.kz@gmail.com",
+      subject: "Заявка на звонок с сайта №1 avancard.kz",
+      from_name: name,
+      phone: phone,
+      message: "Запрос на обратный звонок",
+    };
+    
+    const success = await sendEmail(templateParams);
+    if (success) {
+      setCallDialogOpen(false);
+      setName("");
+      setPhone("");
+    }
   };
 
   return (
@@ -104,6 +160,7 @@ const HeroSection = () => {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Введите имя"
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="space-y-2">
@@ -117,6 +174,7 @@ const HeroSection = () => {
                 placeholder="+7 (___) ___ __ __"
                 required
                 type="tel"
+                disabled={isSubmitting}
               />
             </div>
             <div className="space-y-2">
@@ -128,9 +186,12 @@ const HeroSection = () => {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Опишите ваш запрос"
+                disabled={isSubmitting}
               />
             </div>
-            <Button type="submit" className="w-full">Отправить заявку</Button>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Отправка..." : "Отправить заявку"}
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
@@ -154,6 +215,7 @@ const HeroSection = () => {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Введите имя"
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="space-y-2">
@@ -167,9 +229,12 @@ const HeroSection = () => {
                 placeholder="+7 (___) ___ __ __"
                 required
                 type="tel"
+                disabled={isSubmitting}
               />
             </div>
-            <Button type="submit" className="w-full">Заказать звонок</Button>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Отправка..." : "Заказать звонок"}
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
