@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { MapPin, Phone, Mail, Instagram } from 'lucide-react';
@@ -6,9 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import emailjs from 'emailjs-com';
 
 // EmailJS конфигурация
-const EMAILJS_SERVICE_ID = "service_91fucbj"; // Обновленный Service ID
-const EMAILJS_TEMPLATE_ID = "template_emailjs"; // Потребуется обновить, когда у вас будет реальный Template ID
-const EMAILJS_PUBLIC_KEY = "your_public_key"; // Потребуется обновить, когда у вас будет реальный Public Key
+const EMAILJS_SERVICE_ID = "service_91fucbj"; 
+const EMAILJS_TEMPLATE_ID = "template_ev9m8qk"; 
+const EMAILJS_PUBLIC_KEY = "inLZxKxQHdmID6jKJ"; 
 
 const ContactSection = () => {
   const { toast } = useToast();
