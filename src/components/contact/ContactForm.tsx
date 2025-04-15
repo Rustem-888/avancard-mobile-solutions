@@ -42,29 +42,26 @@ const ContactForm = () => {
     
     try {
       const templateParams = {
-        to_email: "avancard.kz@gmail.com",
-        subject: "Заявка с сайта №1 avancard.kz",
         from_name: formData.name,
         phone: formData.phone,
         message: formData.message || "Без комментария",
       };
       
-      // Make sure to initialize EmailJS before sending the email
+      // Initialize EmailJS before sending
       emailjs.init(EMAILJS_PUBLIC_KEY);
       
-      // Sending the email
-      await emailjs.send(
+      // Send the email
+      const result = await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
+        templateParams
       );
       
-      console.log("Сообщение отправлено:", templateParams);
+      console.log("Сообщение отправлено успешно:", result.text);
       
       toast({
         title: "Заявка отправлена!",
-        description: "Сообщение успешно доставлено на email avancard.kz@gmail.com"
+        description: "Сообщение успешно отправлено"
       });
       
       setFormData({

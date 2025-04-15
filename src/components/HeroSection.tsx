@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
@@ -18,29 +17,28 @@ const HeroSection = () => {
   const [callDialogOpen, setCallDialogOpen] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [comment, setComment] = useState("");
+  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const sendEmail = async (templateParams: any) => {
     setIsSubmitting(true);
     
     try {
-      // Initialize EmailJS before sending the email
+      // Initialize EmailJS before sending
       emailjs.init(EMAILJS_PUBLIC_KEY);
       
       // Sending the email with the correct parameters
-      await emailjs.send(
+      const result = await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
+        templateParams
       );
       
-      console.log("Отправка данных:", templateParams);
+      console.log("Отправка данных успешна:", result.text);
       
       toast({
         title: "Заявка отправлена!",
-        description: "Сообщение успешно доставлено на email avancard.kz@gmail.com",
+        description: "Сообщение успешно отправлено",
       });
       
       return true;
@@ -69,11 +67,9 @@ const HeroSection = () => {
     }
     
     const templateParams = {
-      to_email: "avancard.kz@gmail.com",
-      subject: "Заявка с сайта №1 avancard.kz",
       from_name: name,
       phone: phone,
-      message: comment || "Без комментария",
+      message: message || "Без комментария",
     };
     
     const success = await sendEmail(templateParams);
@@ -81,7 +77,7 @@ const HeroSection = () => {
       setRequestDialogOpen(false);
       setName("");
       setPhone("");
-      setComment("");
+      setMessage("");
     }
   };
 
@@ -96,8 +92,6 @@ const HeroSection = () => {
     }
     
     const templateParams = {
-      to_email: "avancard.kz@gmail.com",
-      subject: "Заявка на звонок с сайта №1 avancard.kz",
       from_name: name,
       phone: phone,
       message: "Запрос на обратный звонок",
@@ -179,13 +173,13 @@ const HeroSection = () => {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="comment" className="text-sm font-medium">
+              <label htmlFor="message" className="text-sm font-medium">
                 Комментарий
               </label>
               <Input
-                id="comment"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                id="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 placeholder="Опишите ваш запрос"
                 disabled={isSubmitting}
               />
