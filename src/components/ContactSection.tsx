@@ -50,7 +50,10 @@ const ContactSection = () => {
         message: formData.comment || "Без комментария",
       };
       
-      // Раскомментировать и использовать реальные ключи EmailJS
+      // Make sure to initialize EmailJS before sending the email
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+      
+      // Sending the email
       await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,

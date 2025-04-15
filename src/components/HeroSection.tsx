@@ -25,7 +25,10 @@ const HeroSection = () => {
     setIsSubmitting(true);
     
     try {
-      // Используем реальный Service ID
+      // Initialize EmailJS before sending the email
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+      
+      // Sending the email with the correct parameters
       await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
