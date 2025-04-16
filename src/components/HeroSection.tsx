@@ -1,19 +1,56 @@
+
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { sendEmail, type EmailData } from '@/lib/emailClient';
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Define validation schema for request form
+const requestFormSchema = z.object({
+  name: z.string().min(2, { message: "Имя должно содержать не менее 2 символов" }),
+  phone: z.string().min(5, { message: "Пожалуйста, введите корректный номер телефона" }),
+  message: z.string().optional(),
+});
+
+// Define validation schema for call form
+const callFormSchema = z.object({
+  name: z.string().min(2, { message: "Имя должно содержать не менее 2 символов" }),
+  phone: z.string().min(5, { message: "Пожалуйста, введите корректный номер телефона" }),
+});
+
+type RequestFormValues = z.infer<typeof requestFormSchema>;
+type CallFormValues = z.infer<typeof callFormSchema>;
 
 const HeroSection = () => {
   const { toast } = useToast();
   const [requestDialogOpen, setRequestDialogOpen] = useState(false);
   const [callDialogOpen, setCallDialogOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Initialize request form
+  const requestForm = useForm<RequestFormValues>({
+    resolver: zodResolver(requestFormSchema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      message: ""
+    }
+  });
+
+  // Initialize call form
+  const callForm = useForm<CallFormValues>({
+    resolver: zodResolver(callFormSchema),
+    defaultValues: {
+      name: "",
+      phone: ""
+    }
+  });
 
   const handleSendEmail = async (data: EmailData) => {
     setIsSubmitting(true);
@@ -48,52 +85,31 @@ const HeroSection = () => {
     }
   };
 
-  const handleRequestSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !phone) {
-      toast({
-        title: "Пожалуйста, заполните обязательные поля",
-        variant: "destructive"
-      });
-      return;
-    }
-    
+  const handleRequestSubmit = async (values: RequestFormValues) => {
     const data: EmailData = {
-      name: name,
-      phone: phone,
-      message: message || "Без комментария",
+      name: values.name,
+      phone: values.phone,
+      message: values.message || "Без комментария",
     };
     
     const success = await handleSendEmail(data);
     if (success) {
       setRequestDialogOpen(false);
-      setName("");
-      setPhone("");
-      setMessage("");
+      requestForm.reset();
     }
   };
 
-  const handleCallSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !phone) {
-      toast({
-        title: "Пожалуйста, заполните обязательные поля",
-        variant: "destructive"
-      });
-      return;
-    }
-    
+  const handleCallSubmit = async (values: CallFormValues) => {
     const data: EmailData = {
-      name: name,
-      phone: phone,
+      name: values.name,
+      phone: values.phone,
       message: "Запрос на обратный звонок",
     };
     
     const success = await handleSendEmail(data);
     if (success) {
       setCallDialogOpen(false);
-      setName("");
-      setPhone("");
+      callForm.reset();
     }
   };
 
@@ -136,50 +152,64 @@ const HeroSection = () => {
               Заполните форму, и мы свяжемся с вами для обсуждения деталей заказа
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleRequestSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
-                Имя*
-              </label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Введите имя"
-                required
-                disabled={isSubmitting}
+          <Form {...requestForm}>
+            <form onSubmit={requestForm.handleSubmit(handleRequestSubmit)} className="space-y-4">
+              <FormField
+                control={requestForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Имя*</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Введите имя" disabled={isSubmitting} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="phone" className="text-sm font-medium">
-                Телефон*
-              </label>
-              <Input
-                id="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+7 (___) ___ __ __"
-                required
-                type="tel"
-                disabled={isSubmitting}
+              
+              <FormField
+                control={requestForm.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Телефон*</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="+7 (___) ___ __ __" 
+                        type="tel" 
+                        disabled={isSubmitting} 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="message" className="text-sm font-medium">
-                Комментарий
-              </label>
-              <Input
-                id="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Опишите ваш запрос"
-                disabled={isSubmitting}
+              
+              <FormField
+                control={requestForm.control}
+                name="message"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Комментарий</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Опишите ваш запрос" 
+                        disabled={isSubmitting} 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Отправка..." : "Отправить заявку"}
-            </Button>
-          </form>
+              
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "Отправка..." : "Отправить заявку"}
+              </Button>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
 
@@ -188,41 +218,49 @@ const HeroSection = () => {
           <DialogHeader>
             <DialogTitle>Заказать звонок</DialogTitle>
             <DialogDescription>
-              О��тавьте ваш номер, и мы перезвоним вам в ближайшее время
+              Оставьте ваш номер, и мы перезвоним вам в ближайшее время
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleCallSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="callName" className="text-sm font-medium">
-                Имя*
-              </label>
-              <Input
-                id="callName"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Введите имя"
-                required
-                disabled={isSubmitting}
+          <Form {...callForm}>
+            <form onSubmit={callForm.handleSubmit(handleCallSubmit)} className="space-y-4">
+              <FormField
+                control={callForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Имя*</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Введите имя" disabled={isSubmitting} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="callPhone" className="text-sm font-medium">
-                Телефон*
-              </label>
-              <Input
-                id="callPhone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+7 (___) ___ __ __"
-                required
-                type="tel"
-                disabled={isSubmitting}
+              
+              <FormField
+                control={callForm.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Телефон*</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="+7 (___) ___ __ __" 
+                        type="tel" 
+                        disabled={isSubmitting} 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Отправка..." : "Заказать звонок"}
-            </Button>
-          </form>
+              
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "Отправка..." : "Заказать звонок"}
+              </Button>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </section>

@@ -10,6 +10,7 @@ export interface EmailData {
   name: string;
   phone: string;
   message: string;
+  [key: string]: string; // Add index signature to make it compatible with Record<string, unknown>
 }
 
 // Инициализация EmailJS только при первом вызове функции
