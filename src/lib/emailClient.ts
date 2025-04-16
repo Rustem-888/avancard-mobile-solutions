@@ -13,12 +13,12 @@ export interface EmailData {
   [key: string]: string; // Add index signature to make it compatible with Record<string, unknown>
 }
 
-// Инициализация EmailJS только при первом вызове функции
+// Initialize EmailJS only on first function call
 let isInitialized = false;
 
 export async function sendEmail(data: EmailData): Promise<{ success: boolean; message: string }> {
   try {
-    // Инициализируем EmailJS только один раз
+    // Initialize EmailJS only once
     if (!isInitialized) {
       emailjs.init(EMAILJS_PUBLIC_KEY);
       isInitialized = true;
