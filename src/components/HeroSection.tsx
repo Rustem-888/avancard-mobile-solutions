@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
@@ -14,10 +15,11 @@ const HeroSection = () => {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const sendEmail = async (data: { from_name: string; phone: string; message: string }) => {
+  const sendEmail = async (data: { name: string; phone: string; message: string }) => {
     setIsSubmitting(true);
     
     try {
+      console.log("Sending data to API from HeroSection:", data);
       const response = await fetch('/api/email/send', {
         method: 'POST',
         headers: {
@@ -27,6 +29,7 @@ const HeroSection = () => {
       });
       
       const result = await response.json();
+      console.log("API response in HeroSection:", result);
       
       if (result.success) {
         console.log("Отправка данных успешна");
@@ -65,7 +68,7 @@ const HeroSection = () => {
     }
     
     const data = {
-      from_name: name,
+      name: name,
       phone: phone,
       message: message || "Без комментария",
     };
@@ -90,7 +93,7 @@ const HeroSection = () => {
     }
     
     const data = {
-      from_name: name,
+      name: name,
       phone: phone,
       message: "Запрос на обратный звонок",
     };

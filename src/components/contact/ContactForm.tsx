@@ -4,7 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-// Типы для формы
+// Types for form
 interface FormData {
   name: string;
   phone: string;
@@ -42,19 +42,21 @@ const ContactForm = () => {
     setFormSubmitting(true);
     
     try {
+      console.log("Sending data to API:", formData);
       const response = await fetch('/api/email/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from_name: formData.name,
+          name: formData.name,
           phone: formData.phone,
           message: formData.message || "Без комментария"
         })
       });
       
       const result = await response.json();
+      console.log("API response:", result);
       
       if (result.success) {
         console.log("Сообщение отправлено успешно");

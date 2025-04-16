@@ -1,13 +1,13 @@
 
 import emailjs from 'emailjs-com';
 
-// EmailJS конфигурация
+// EmailJS configuration
 const EMAILJS_SERVICE_ID = "service_91fucbj";
 const EMAILJS_TEMPLATE_ID = "template_ev9m8qk";
 const EMAILJS_PUBLIC_KEY = "inLZxKxQHdmID6jKJ";
 
 export interface EmailData {
-  from_name: string;
+  name: string;
   phone: string;
   message: string;
   [key: string]: string; // Add index signature to make it compatible with Record<string, unknown>
@@ -15,10 +15,12 @@ export interface EmailData {
 
 export async function sendEmail(data: EmailData): Promise<{ success: boolean; message: string }> {
   try {
-    // Инициализация EmailJS
+    // Initialize EmailJS
     emailjs.init(EMAILJS_PUBLIC_KEY);
     
-    // Отправка email
+    console.log("Sending email with data:", data);
+    
+    // Send email
     const result = await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,

@@ -8,22 +8,23 @@ export default async function handler(req: Request, res: Response) {
   }
 
   try {
-    const data = req.body as EmailData;
+    const data = req.body;
+    console.log("Received email request with data:", data);
     
-    // Проверка обязательных полей
-    if (!data.from_name || !data.phone) {
+    // Check for required fields
+    if (!data.name || !data.phone) {
       return res.status(400).json({ 
         success: false, 
         message: 'Отсутствуют обязательные поля (имя и телефон)' 
       });
     }
     
-    // Установка значения по умолчанию для сообщения
+    // Set default value for message if not provided
     if (!data.message) {
       data.message = 'Без комментария';
     }
     
-    const result = await sendEmail(data);
+    const result = await sendEmail(data as EmailData);
     
     if (result.success) {
       return res.status(200).json(result);
