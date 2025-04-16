@@ -10,6 +10,7 @@ export interface EmailData {
   from_name: string;
   phone: string;
   message: string;
+  [key: string]: string; // Add index signature to make it compatible with Record<string, unknown>
 }
 
 export async function sendEmail(data: EmailData): Promise<{ success: boolean; message: string }> {
