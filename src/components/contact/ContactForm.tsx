@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { sendEmail, type EmailData } from '@/lib/emailClient';
 
 // Types for form
 interface FormData {
@@ -42,21 +42,15 @@ const ContactForm = () => {
     setFormSubmitting(true);
     
     try {
-      console.log("Sending data to API:", formData);
-      const response = await fetch('/api/email/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          phone: formData.phone,
-          message: formData.message || "Без комментария"
-        })
-      });
+      console.log("Sending email data:", formData);
       
-      const result = await response.json();
-      console.log("API response:", result);
+      const emailData: EmailData = {
+        name: formData.name,
+        phone: formData.phone,
+        message: formData.message || "Без комментария"
+      };
+      
+      const result = await sendEmail(emailData);
       
       if (result.success) {
         console.log("Сообщение отправлено успешно");

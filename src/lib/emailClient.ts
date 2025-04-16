@@ -1,5 +1,4 @@
 
-/*
 import emailjs from 'emailjs-com';
 
 // EmailJS configuration
@@ -11,17 +10,22 @@ export interface EmailData {
   name: string;
   phone: string;
   message: string;
-  [key: string]: string; // Add index signature to make it compatible with Record<string, unknown>
 }
+
+// Инициализация EmailJS только при первом вызове функции
+let isInitialized = false;
 
 export async function sendEmail(data: EmailData): Promise<{ success: boolean; message: string }> {
   try {
-    // Initialize EmailJS
-    emailjs.init(EMAILJS_PUBLIC_KEY);
+    // Инициализируем EmailJS только один раз
+    if (!isInitialized) {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+      isInitialized = true;
+    }
     
     console.log("Sending email with data:", data);
     
-    // Send email
+    // Send email directly from the client
     const result = await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,
@@ -35,6 +39,3 @@ export async function sendEmail(data: EmailData): Promise<{ success: boolean; me
     return { success: false, message: "Ошибка отправки сообщения" };
   }
 }
-*/
-
-// Этот файл заменен на emailClient.ts для клиентской отправки писем

@@ -1,4 +1,5 @@
 
+/*
 import { Request, Response } from 'express';
 import { sendEmail, EmailData } from '../../lib/emailService';
 
@@ -39,3 +40,8 @@ export default async function handler(req: Request, res: Response) {
     });
   }
 }
+*/
+
+// Этот API файл больше не используется.
+// Отправка писем перенесена на клиентскую сторону с использованием emailClient.ts
+

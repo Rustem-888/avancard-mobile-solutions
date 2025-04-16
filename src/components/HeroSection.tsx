@@ -1,10 +1,10 @@
-
 import { useState } from 'react';
 import { CreditCard, Phone } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { sendEmail, type EmailData } from '@/lib/emailClient';
 
 const HeroSection = () => {
   const { toast } = useToast();
@@ -15,21 +15,12 @@ const HeroSection = () => {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const sendEmail = async (data: { name: string; phone: string; message: string }) => {
+  const handleSendEmail = async (data: EmailData) => {
     setIsSubmitting(true);
     
     try {
-      console.log("Sending data to API from HeroSection:", data);
-      const response = await fetch('/api/email/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-      
-      const result = await response.json();
-      console.log("API response in HeroSection:", result);
+      console.log("Sending data from HeroSection:", data);
+      const result = await sendEmail(data);
       
       if (result.success) {
         console.log("Отправка данных успешна");
@@ -67,13 +58,13 @@ const HeroSection = () => {
       return;
     }
     
-    const data = {
+    const data: EmailData = {
       name: name,
       phone: phone,
       message: message || "Без комментария",
     };
     
-    const success = await sendEmail(data);
+    const success = await handleSendEmail(data);
     if (success) {
       setRequestDialogOpen(false);
       setName("");
@@ -92,13 +83,13 @@ const HeroSection = () => {
       return;
     }
     
-    const data = {
+    const data: EmailData = {
       name: name,
       phone: phone,
       message: "Запрос на обратный звонок",
     };
     
-    const success = await sendEmail(data);
+    const success = await handleSendEmail(data);
     if (success) {
       setCallDialogOpen(false);
       setName("");
