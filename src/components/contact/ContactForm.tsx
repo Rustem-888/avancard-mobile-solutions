@@ -3,16 +3,17 @@ import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import emailjs from 'emailjs-com';
 
-// EmailJS configuration
-const EMAILJS_SERVICE_ID = "service_91fucbj";
-const EMAILJS_TEMPLATE_ID = "template_ev9m8qk";
-const EMAILJS_PUBLIC_KEY = "inLZxKxQHdmID6jKJ";
+// Типы для формы
+interface FormData {
+  name: string;
+  phone: string;
+  message: string;
+}
 
 const ContactForm = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     phone: "",
     message: ""
@@ -41,34 +42,36 @@ const ContactForm = () => {
     setFormSubmitting(true);
     
     try {
-      const templateParams = {
-        from_name: formData.name,
-        phone: formData.phone,
-        message: formData.message || "Без комментария",
-      };
-      
-      // Initialize EmailJS before sending
-      emailjs.init(EMAILJS_PUBLIC_KEY);
-      
-      // Send the email
-      const result = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams
-      );
-      
-      console.log("Сообщение отправлено успешно:", result.text);
-      
-      toast({
-        title: "Заявка отправлена!",
-        description: "Сообщение успешно отправлено"
+      const response = await fetch('/api/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from_name: formData.name,
+          phone: formData.phone,
+          message: formData.message || "Без комментария"
+        })
       });
       
-      setFormData({
-        name: "",
-        phone: "",
-        message: ""
-      });
+      const result = await response.json();
+      
+      if (result.success) {
+        console.log("Сообщение отправлено успешно");
+        
+        toast({
+          title: "Заявка отправлена!",
+          description: result.message || "Сообщение успешно отправлено"
+        });
+        
+        setFormData({
+          name: "",
+          phone: "",
+          message: ""
+        });
+      } else {
+        throw new Error(result.message || "Ошибка отправки");
+      }
     } catch (error) {
       console.error("Ошибка отправки:", error);
       toast({

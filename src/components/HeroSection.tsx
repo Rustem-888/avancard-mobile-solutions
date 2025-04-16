@@ -4,12 +4,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import emailjs from 'emailjs-com';
-
-// EmailJS конфигурация
-const EMAILJS_SERVICE_ID = "service_91fucbj"; 
-const EMAILJS_TEMPLATE_ID = "template_ev9m8qk"; 
-const EMAILJS_PUBLIC_KEY = "inLZxKxQHdmID6jKJ"; 
 
 const HeroSection = () => {
   const { toast } = useToast();
@@ -20,28 +14,32 @@ const HeroSection = () => {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const sendEmail = async (templateParams: any) => {
+  const sendEmail = async (data: { from_name: string; phone: string; message: string }) => {
     setIsSubmitting(true);
     
     try {
-      // Initialize EmailJS before sending
-      emailjs.init(EMAILJS_PUBLIC_KEY);
-      
-      // Sending the email with the correct parameters
-      const result = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams
-      );
-      
-      console.log("Отправка данных успешна:", result.text);
-      
-      toast({
-        title: "Заявка отправлена!",
-        description: "Сообщение успешно отправлено",
+      const response = await fetch('/api/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
       });
       
-      return true;
+      const result = await response.json();
+      
+      if (result.success) {
+        console.log("Отправка данных успешна");
+        
+        toast({
+          title: "Заявка отправлена!",
+          description: result.message || "Сообщение успешно отправлено",
+        });
+        
+        return true;
+      } else {
+        throw new Error(result.message || "Ошибка отправки");
+      }
     } catch (error) {
       console.error("Ошибка отправки:", error);
       toast({
@@ -66,13 +64,13 @@ const HeroSection = () => {
       return;
     }
     
-    const templateParams = {
+    const data = {
       from_name: name,
       phone: phone,
       message: message || "Без комментария",
     };
     
-    const success = await sendEmail(templateParams);
+    const success = await sendEmail(data);
     if (success) {
       setRequestDialogOpen(false);
       setName("");
@@ -91,13 +89,13 @@ const HeroSection = () => {
       return;
     }
     
-    const templateParams = {
+    const data = {
       from_name: name,
       phone: phone,
       message: "Запрос на обратный звонок",
     };
     
-    const success = await sendEmail(templateParams);
+    const success = await sendEmail(data);
     if (success) {
       setCallDialogOpen(false);
       setName("");
@@ -196,7 +194,7 @@ const HeroSection = () => {
           <DialogHeader>
             <DialogTitle>Заказать звонок</DialogTitle>
             <DialogDescription>
-              Оставьте ваш номер, и мы перезвоним вам в ближайшее время
+              О��тавьте ваш номер, и мы перезвоним вам в ближайшее время
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCallSubmit} className="space-y-4">
